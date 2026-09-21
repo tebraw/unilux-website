@@ -1,0 +1,6 @@
+# Local Netlify folder
+.netlify
+
+# Local backups and dev/testing scratch files (not part of the deployed site)
+index.html.bak_*
+screenshot_tool/
