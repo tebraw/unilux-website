@@ -48,7 +48,7 @@
 @media(max-width:560px){.whatsapp-float span{display:none}.whatsapp-float{padding:14px;border-radius:50%}}
 
 /* â”€â”€ Portfolio â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-.portfolio{padding:100px 0;background:var(--ink)}
+.portfolio{padding:100px 0;background:var(--ink);color:#fff}.portfolio .section-heading>p{color:rgba(255,255,255,.62)}
 .portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
 .portfolio-card{border-radius:18px;overflow:hidden;background:#1a1a1a;border:1px solid rgba(255,255,255,.07);transition:transform .25s}
 .portfolio-card:hover{transform:translateY(-6px)}
@@ -279,7 +279,46 @@
     </section>
 
 
-    <!-- â•â•â• PORTFOLIO â•â•â• -->>
+    <section class="portfolio section" id="projects">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow light" data-i18n="proj_eyebrow">On the job site</p>
+            <h2 data-i18n="proj_h2">Real UNILUX projects, built in the field.</h2>
+          </div>
+          <p data-i18n="proj_sub">A look inside an active UNILUX SIP construction project in Panama — from structural frame to finished building envelope.</p>
+        </div>
+        <div class="portfolio-grid">
+          <article class="portfolio-card">
+            <div class="portfolio-card-img"><img src="assets/images/projects/site-wall-panel-install.jpg" alt="Crane lifting a UNILUX SIP wall panel into place on a steel-framed building under construction" loading="lazy"></div>
+            <div class="portfolio-card-body">
+              <span class="portfolio-card-tag" data-i18n="proj_1_tag">Wall panels</span>
+              <h3 data-i18n="proj_1_title">SIP wall panel installation</h3>
+              <p class="portfolio-card-location" data-i18n="proj_loc">Panama, Central America</p>
+              <p data-i18n="proj_1_desc">Precision-formed SIP wall panels lifted into place on a steel structural frame for a fast, weather-tight building envelope.</p>
+            </div>
+          </article>
+          <article class="portfolio-card">
+            <div class="portfolio-card-img"><img src="assets/images/projects/site-roof-panel-install.jpg" alt="Crew installing UNILUX SIP roof panels on a building frame with ocean views in the background" loading="lazy"></div>
+            <div class="portfolio-card-body">
+              <span class="portfolio-card-tag" data-i18n="proj_2_tag">Roof panels</span>
+              <h3 data-i18n="proj_2_title">SIP roof panel installation</h3>
+              <p class="portfolio-card-location" data-i18n="proj_loc">Panama, Central America</p>
+              <p data-i18n="proj_2_desc">The same panel system extends to the roof, giving continuous insulation with no thermal gap between wall and roof.</p>
+            </div>
+          </article>
+          <article class="portfolio-card">
+            <div class="portfolio-card-img"><img src="assets/images/projects/site-completed-structure.jpg" alt="Completed two-story UNILUX SIP structure with finished roof, ready for windows and interior work" loading="lazy"></div>
+            <div class="portfolio-card-body">
+              <span class="portfolio-card-tag" data-i18n="proj_3_tag">Completed structure</span>
+              <h3 data-i18n="proj_3_title">Finished building envelope</h3>
+              <p class="portfolio-card-location" data-i18n="proj_loc">Panama, Central America</p>
+              <p data-i18n="proj_3_desc">Walls and roof complete and weather-tight, ready for windows, finishes and interior work.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
 
     <!-- â•â•â• TESTIMONIALS â•â•â• -->
     <section class="testimonials section">
@@ -911,6 +950,19 @@ const i18n = {
     portfolio_p3_title: 'Boutique Hotel',
     portfolio_p3_loc: 'Bocas del Toro, Panama',
     portfolio_p3_desc: '12-unit hospitality project featuring full UNILUX material supply and solar integration.',
+    proj_eyebrow: 'On the job site',
+    proj_h2: 'Real UNILUX projects, built in the field.',
+    proj_sub: 'A look inside an active UNILUX SIP construction project in Panama — from structural frame to finished building envelope.',
+    proj_loc: 'Panama, Central America',
+    proj_1_tag: 'Wall panels',
+    proj_1_title: 'SIP wall panel installation',
+    proj_1_desc: 'Precision-formed SIP wall panels lifted into place on a steel structural frame for a fast, weather-tight building envelope.',
+    proj_2_tag: 'Roof panels',
+    proj_2_title: 'SIP roof panel installation',
+    proj_2_desc: 'The same panel system extends to the roof, giving continuous insulation with no thermal gap between wall and roof.',
+    proj_3_tag: 'Completed structure',
+    proj_3_title: 'Finished building envelope',
+    proj_3_desc: 'Walls and roof complete and weather-tight, ready for windows, finishes and interior work.',
     testimonials_eyebrow: 'CLIENT STORIES',
     testimonials_h2: 'Trusted by builders worldwide.',
     testimonial_1_quote: 'The UNILUX SIP panels transformed our build timeline. What would have taken 6 months was done in 10 weeks. The quality exceeded every expectation.',
@@ -1124,6 +1176,19 @@ const i18n = {
     portfolio_p3_title: 'Hotel Boutique',
     portfolio_p3_loc: 'Bocas del Toro, Panam\u00e1',
     portfolio_p3_desc: 'Proyecto de hospitalidad de 12 unidades con suministro completo de materiales UNILUX e integraci\u00f3n solar.',
+    proj_eyebrow: 'En la obra',
+    proj_h2: 'Proyectos reales de UNILUX, construidos en el terreno.',
+    proj_sub: 'Un vistazo a un proyecto activo de construcción SIP de UNILUX en Panamá — desde la estructura hasta la envolvente terminada.',
+    proj_loc: 'Panamá, Centroamérica',
+    proj_1_tag: 'Paneles de pared',
+    proj_1_title: 'Instalación de paneles SIP de pared',
+    proj_1_desc: 'Paneles SIP de pared, formados con precisión, izados sobre una estructura de acero para una envolvente rápida y hermética.',
+    proj_2_tag: 'Paneles de techo',
+    proj_2_title: 'Instalación de paneles SIP de techo',
+    proj_2_desc: 'El mismo sistema de paneles se extiende al techo, brindando aislamiento continuo sin puente térmico entre pared y techo.',
+    proj_3_tag: 'Estructura terminada',
+    proj_3_title: 'Envolvente del edificio terminada',
+    proj_3_desc: 'Paredes y techo completos y herméticos, listos para ventanas, acabados y trabajo interior.',
     testimonials_eyebrow: 'TESTIMONIOS',
     testimonials_h2: 'La confianza de constructores en todo el mundo.',
     testimonial_1_quote: 'Los paneles SIP de UNILUX transformaron nuestro cronograma de obra. Lo que hubiera tomado 6 meses se hizo en 10 semanas. La calidad super\u00f3 todas las expectativas.',
