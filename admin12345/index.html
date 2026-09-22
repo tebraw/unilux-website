@@ -207,8 +207,13 @@ nav.tabs{display:flex;gap:8px;flex-wrap:wrap}
     });
   }
 
-  function isFileUrl(v){
-    return typeof v === 'string' && /^https?:\/\//.test(v) && /\.(jpe?g|png|gif|webp|pdf|svg)(\?|$)/i.test(v);
+  // Netlify represents file-upload fields in submission data as an object
+  // ({filename, type, size, url}), not a plain string, so both shapes must
+  // be handled to get the actual URL to link/display.
+  function fileUrl(v){
+    if (v && typeof v === 'object' && typeof v.url === 'string') return v.url;
+    if (typeof v === 'string' && /^https?:\/\//.test(v)) return v;
+    return null;
   }
 
   function fieldRow(label, value){
@@ -301,8 +306,9 @@ nav.tabs{display:flex;gap:8px;flex-wrap:wrap}
         fields += fieldRow('Project type', d.project);
       }
       var floorplanLink = '';
-      if (isCfg && d.floorplan && isFileUrl(d.floorplan)) {
-        floorplanLink = '<div class="entry-images"><a href="'+escapeHtml(d.floorplan)+'" target="_blank" rel="noopener">View uploaded floor plan &rarr;</a></div>';
+      var fpUrl = isCfg ? fileUrl(d.floorplan) : null;
+      if (fpUrl) {
+        floorplanLink = '<div class="entry-images"><a href="'+escapeHtml(fpUrl)+'" target="_blank" rel="noopener">View uploaded floor plan &rarr;</a></div>';
       }
       var msg = d.message ? '<div class="entry-message">'+escapeHtml(d.message)+'</div>' : '';
       return '<div class="entry-card">'
@@ -342,8 +348,8 @@ nav.tabs{display:flex;gap:8px;flex-wrap:wrap}
       var descBlock = d.description ? '<div class="entry-message"><b style="display:block;color:var(--muted);font-size:.72rem;text-transform:uppercase;margin-bottom:4px">Description</b>'+escapeHtml(d.description)+'</div>' : '';
       var notesBlock = d.notes ? '<div class="entry-message"><b style="display:block;color:var(--muted);font-size:.72rem;text-transform:uppercase;margin-bottom:4px">Notes</b>'+escapeHtml(d.notes)+'</div>' : '';
       var imgKeys = ['image_hero','image_2','image_3','image_4'];
-      var imgs = imgKeys.filter(function(k){ return isFileUrl(d[k]); }).map(function(k){
-        return '<a href="'+escapeHtml(d[k])+'" target="_blank" rel="noopener"><img src="'+escapeHtml(d[k])+'" alt=""></a>';
+      var imgs = imgKeys.map(function(k){ return fileUrl(d[k]); }).filter(function(u){ return !!u; }).map(function(url){
+        return '<a href="'+escapeHtml(url)+'" target="_blank" rel="noopener"><img src="'+escapeHtml(url)+'" alt=""></a>';
       }).join('');
       var imgsBlock = imgs ? '<div class="entry-images">'+imgs+'</div>' : '<div class="empty-state" style="padding:8px 0;text-align:left">No images attached.</div>';
 
