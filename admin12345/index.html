@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>UNILUX Admin</title>
+<style>
+:root{--ink:#0b0d12;--card:#12151d;--card2:#171b26;--line:rgba(255,255,255,.09);--red:#e21f2f;--txt:#e7e9ee;--muted:#9aa1ac}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+a{color:inherit}
+input,select,textarea,button{font-family:inherit;font-size:.95rem}
+
+/* -- Gate -- */
+#gate{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--ink);z-index:10;padding:20px}
+.gate-box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:36px 32px;width:100%;max-width:360px;text-align:center}
+.gate-box h1{margin:0 0 6px;font-size:1.3rem}
+.gate-box p{margin:0 0 20px;color:var(--muted);font-size:.9rem}
+.gate-box input{width:100%;padding:12px 14px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:#fff;margin-bottom:12px}
+.gate-box button{width:100%;padding:12px 14px;border-radius:8px;border:0;background:var(--red);color:#fff;font-weight:700;cursor:pointer}
+.gate-box button:hover{background:#c81726}
+.gate-error{color:#ff6b7a;font-size:.85rem;min-height:20px;margin-top:10px}
+
+/* -- Dashboard shell -- */
+#dashboard{max-width:1100px;margin:0 auto;padding:24px 20px 80px}
+header{display:flex;flex-wrap:wrap;align-items:center;gap:16px;justify-content:space-between;padding:10px 0 22px;border-bottom:1px solid var(--line);margin-bottom:24px}
+header h1{font-size:1.25rem;margin:0}
+header .back-link{color:var(--muted);font-size:.85rem;text-decoration:none}
+header .back-link:hover{color:#fff}
+nav.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tab-btn{padding:9px 16px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--muted);cursor:pointer;font-weight:600;font-size:.88rem}
+.tab-btn.active{background:var(--red);color:#fff;border-color:var(--red)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.toolbar{display:flex;justify-content:flex-end;margin-bottom:14px}
+.toolbar button{padding:8px 14px;border-radius:7px;border:1px solid var(--line);background:var(--card);color:var(--txt);cursor:pointer;font-size:.85rem}
+.toolbar button:hover{border-color:var(--red)}
+
+/* -- Cards / lists -- */
+.entry-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.entry-card .entry-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.entry-card .entry-name{font-weight:700;font-size:1.02rem}
+.entry-card .entry-date{color:var(--muted);font-size:.8rem;white-space:nowrap}
+.entry-tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:rgba(226,31,47,.15);color:#ff8891;padding:3px 9px;border-radius:100px;margin-bottom:8px}
+.entry-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px 20px;margin:10px 0}
+.entry-field{font-size:.85rem}
+.entry-field b{display:block;color:var(--muted);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.entry-message{background:var(--card2);border-radius:8px;padding:10px 12px;font-size:.86rem;white-space:pre-wrap;margin-top:8px}
+.entry-images{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.entry-images a img{width:90px;height:68px;object-fit:cover;border-radius:6px;border:1px solid var(--line)}
+.empty-state,.loading-state{color:var(--muted);text-align:center;padding:40px 20px;font-size:.9rem}
+.error-state{color:#ff6b7a;text-align:center;padding:40px 20px;font-size:.9rem}
+
+/* -- Product form -- */
+.hint{color:var(--muted);font-size:.87rem;margin:-6px 0 20px;max-width:640px}
+#product-form{display:grid;gap:16px;max-width:640px}
+#product-form label{display:flex;flex-direction:column;gap:6px;font-size:.85rem;font-weight:600;color:#cdd1d9}
+#product-form input[type="text"],#product-form input[type="file"],#product-form select,#product-form textarea{padding:11px 13px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:#fff;font-weight:400}
+#product-form textarea{resize:vertical}
+#product-form button[type="submit"]{padding:13px 18px;border-radius:8px;border:0;background:var(--red);color:#fff;font-weight:700;cursor:pointer;justify-self:start}
+#product-form button[type="submit"]:hover{background:#c81726}
+#product-form button[type="submit"]:disabled{opacity:.6;cursor:not-allowed}
+#product-form-status{font-size:.88rem;min-height:20px}
+#product-form-status.success{color:#4ade80}
+#product-form-status.error{color:#ff6b7a}
+.field-note{font-weight:400;color:var(--muted);font-size:.78rem}
+
+@media(max-width:640px){header{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="gate-box">
+    <h1>UNILUX Admin</h1>
+    <p>Enter the admin password to continue.</p>
+    <input type="password" id="gate-password" placeholder="Password" autocomplete="current-password">
+    <button id="gate-submit" type="button">Unlock</button>
+    <div class="gate-error" id="gate-error"></div>
+  </div>
+</div>
+
+<div id="dashboard" hidden>
+  <header>
+    <h1>UNILUX Admin</h1>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="leads">Leads</button>
+      <button class="tab-btn" data-tab="add-product">Add product</button>
+      <button class="tab-btn" data-tab="product-inbox">Product inbox</button>
+    </nav>
+    <a class="back-link" href="/">&larr; Back to website</a>
+  </header>
+
+  <section id="tab-leads" class="tab-panel active">
+    <div class="toolbar"><button type="button" id="refresh-leads">Refresh</button></div>
+    <div id="leads-container"><div class="loading-state">Loading leads&hellip;</div></div>
+  </section>
+
+  <section id="tab-add-product" class="tab-panel">
+    <h2 style="margin-top:0">Submit a new product</h2>
+    <p class="hint">Fill this in and press "Submit product". This does <strong>not</strong> publish it live automatically &mdash; it lands in the "Product inbox" tab. Message your developer that a new product is waiting, and it will be built into the live site from the details and images you provide here.</p>
+
+    <form name="product-submission" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" enctype="multipart/form-data" id="product-form">
+      <input type="hidden" name="form-name" value="product-submission">
+      <p style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true"><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+
+      <label>Product / system name *
+        <input type="text" name="product_name" placeholder="e.g. Impact-Rated Storm Windows" required>
+      </label>
+
+      <label>Category *
+        <select name="category" required>
+          <option value="">Select a category&hellip;</option>
+          <option>Roof Panels</option>
+          <option>Wall Panels</option>
+          <option>Floor Panels</option>
+          <option>Windows &amp; Doors</option>
+          <option>Helical Piles</option>
+          <option>Solar System</option>
+          <option>New category (explain in notes)</option>
+        </select>
+      </label>
+
+      <label>Short tagline *
+        <span class="field-note">One line. Used on the homepage product card.</span>
+        <input type="text" name="tagline" placeholder="e.g. Built to withstand Category 5 hurricane winds" required>
+      </label>
+
+      <label>Full description *
+        <span class="field-note">A paragraph. Used on the product's detail section.</span>
+        <textarea name="description" rows="4" placeholder="Describe the product, its benefits and what makes it right for Central America..." required></textarea>
+      </label>
+
+      <label>Key features *
+        <span class="field-note">One per line. Becomes the bullet-point list.</span>
+        <textarea name="features" rows="5" placeholder="Fire-resistant core&#10;R-28 insulation value&#10;Factory-sealed against moisture&#10;..." required></textarea>
+      </label>
+
+      <label>Specs / technical data
+        <span class="field-note">Optional. One "label: value" per line.</span>
+        <textarea name="specs" rows="4" placeholder="Panel thickness: 114mm&#10;Weight: 18kg/m²&#10;Warranty: 15 years"></textarea>
+      </label>
+
+      <label>Price / call-to-action note
+        <span class="field-note">Optional, e.g. "Contact for pricing" or a starting price.</span>
+        <input type="text" name="price_note" placeholder="Contact for pricing">
+      </label>
+
+      <label>Hero image *
+        <span class="field-note">Main photo/render for the product page banner.</span>
+        <input type="file" name="image_hero" accept="image/*" required>
+      </label>
+
+      <label>Additional image
+        <span class="field-note">Optional gallery photo.</span>
+        <input type="file" name="image_2" accept="image/*">
+      </label>
+
+      <label>Additional image
+        <span class="field-note">Optional gallery photo.</span>
+        <input type="file" name="image_3" accept="image/*">
+      </label>
+
+      <label>Additional image
+        <span class="field-note">Optional gallery photo.</span>
+        <input type="file" name="image_4" accept="image/*">
+      </label>
+
+      <label>Notes for the developer
+        <span class="field-note">Optional. Anything else worth knowing before this goes live.</span>
+        <textarea name="notes" rows="3" placeholder="e.g. Replace the current Roof Panels finish options with this..."></textarea>
+      </label>
+
+      <div id="product-form-status"></div>
+      <button type="submit" id="product-form-submit">Submit product</button>
+    </form>
+  </section>
+
+  <section id="tab-product-inbox" class="tab-panel">
+    <div class="toolbar"><button type="button" id="refresh-products">Refresh</button></div>
+    <div id="products-container"><div class="loading-state">Loading product submissions&hellip;</div></div>
+  </section>
+</div>
+
+<script>
+(function(){
+  var qs = function(s,c){return (c||document).querySelector(s)};
+  var qsa = function(s,c){return [].slice.call((c||document).querySelectorAll(s))};
+  var FN_URL = '/.netlify/functions/admin-data';
+  var loadedTabs = {};
+
+  function getPw(){ return sessionStorage.getItem('unilux_admin_pw') || ''; }
+  function setPw(v){ sessionStorage.setItem('unilux_admin_pw', v); }
+  function clearPw(){ sessionStorage.removeItem('unilux_admin_pw'); }
+
+  function fmtDate(iso){
+    try{
+      var d = new Date(iso);
+      return d.toLocaleString(undefined,{year:'numeric',month:'short',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+    }catch(e){ return iso || ''; }
+  }
+
+  function escapeHtml(s){
+    return String(s==null?'':s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  function isFileUrl(v){
+    return typeof v === 'string' && /^https?:\/\//.test(v) && /\.(jpe?g|png|gif|webp|pdf|svg)(\?|$)/i.test(v);
+  }
+
+  function fieldRow(label, value){
+    if (value === undefined || value === null || value === '') return '';
+    return '<div class="entry-field"><b>'+escapeHtml(label)+'</b>'+escapeHtml(value)+'</div>';
+  }
+
+  function callApi(type){
+    return fetch(FN_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: getPw(), type: type })
+    }).then(function(res){
+      if (res.status === 401) { throw { authError: true }; }
+      if (!res.ok) { throw new Error('Request failed (' + res.status + ')'); }
+      return res.json();
+    });
+  }
+
+  // ---------- Gate ----------
+  function tryUnlock(pw){
+    var errEl = qs('#gate-error');
+    errEl.textContent = '';
+    setPw(pw);
+    callApi('leads').then(function(data){
+      qs('#gate').hidden = true;
+      qs('#dashboard').hidden = false;
+      renderLeads(data);
+      loadedTabs.leads = true;
+    }).catch(function(err){
+      clearPw();
+      errEl.textContent = err && err.authError ? 'Incorrect password.' : 'Could not reach the admin service. Try again in a moment.';
+    });
+  }
+
+  qs('#gate-submit').addEventListener('click', function(){
+    var pw = qs('#gate-password').value;
+    if (!pw) return;
+    tryUnlock(pw);
+  });
+  qs('#gate-password').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') qs('#gate-submit').click();
+  });
+
+  // ---------- Tabs ----------
+  qsa('.tab-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      qsa('.tab-btn').forEach(function(b){ b.classList.toggle('active', b === btn); });
+      var tab = btn.dataset.tab;
+      qsa('.tab-panel').forEach(function(p){ p.classList.toggle('active', p.id === 'tab-' + tab); });
+      if (tab === 'leads' && !loadedTabs.leads) { loadLeads(); }
+      if (tab === 'product-inbox' && !loadedTabs.products) { loadProducts(); }
+    });
+  });
+
+  // ---------- Leads ----------
+  function loadLeads(){
+    qs('#leads-container').innerHTML = '<div class="loading-state">Loading leads&hellip;</div>';
+    callApi('leads').then(function(data){
+      loadedTabs.leads = true;
+      renderLeads(data);
+    }).catch(function(err){
+      handleApiError(err, '#leads-container');
+    });
+  }
+
+  function renderLeads(data){
+    var forms = (data && data.forms) || {};
+    var contact = (forms['contact'] || []).map(function(s){ s._src = 'contact'; return s; });
+    var cfg = (forms['configurator-request'] || []).map(function(s){ s._src = 'configurator-request'; return s; });
+    var all = contact.concat(cfg).sort(function(a,b){ return new Date(b.created_at) - new Date(a.created_at); });
+
+    var el = qs('#leads-container');
+    if (!all.length){ el.innerHTML = '<div class="empty-state">No leads yet. New contact form and configurator submissions will appear here.</div>'; return; }
+
+    el.innerHTML = all.map(function(s){
+      var d = s.data || {};
+      var isCfg = s._src === 'configurator-request';
+      var tag = isCfg ? 'Configurator request' : 'Contact form';
+      var name = d.name || s.name || '(no name)';
+      var fields = '';
+      fields += fieldRow('Email', d.email || s.email);
+      fields += fieldRow('Phone', d.phone);
+      fields += fieldRow('Location', d.location);
+      if (isCfg){
+        fields += fieldRow('Products', d.products);
+        fields += fieldRow('Floor area', d.sqm);
+        fields += fieldRow('Floors', d.floors);
+      } else {
+        fields += fieldRow('Project type', d.project);
+      }
+      var floorplanLink = '';
+      if (isCfg && d.floorplan && isFileUrl(d.floorplan)) {
+        floorplanLink = '<div class="entry-images"><a href="'+escapeHtml(d.floorplan)+'" target="_blank" rel="noopener">View uploaded floor plan &rarr;</a></div>';
+      }
+      var msg = d.message ? '<div class="entry-message">'+escapeHtml(d.message)+'</div>' : '';
+      return '<div class="entry-card">'
+        + '<span class="entry-tag">'+escapeHtml(tag)+'</span>'
+        + '<div class="entry-top"><span class="entry-name">'+escapeHtml(name)+'</span><span class="entry-date">'+escapeHtml(fmtDate(s.created_at))+'</span></div>'
+        + '<div class="entry-grid">'+fields+'</div>'
+        + msg + floorplanLink
+        + '</div>';
+    }).join('');
+  }
+
+  // ---------- Product inbox ----------
+  function loadProducts(){
+    qs('#products-container').innerHTML = '<div class="loading-state">Loading product submissions&hellip;</div>';
+    callApi('products').then(function(data){
+      loadedTabs.products = true;
+      renderProducts(data);
+    }).catch(function(err){
+      handleApiError(err, '#products-container');
+    });
+  }
+
+  function renderProducts(data){
+    var forms = (data && data.forms) || {};
+    var subs = (forms['product-submission'] || []).sort(function(a,b){ return new Date(b.created_at) - new Date(a.created_at); });
+
+    var el = qs('#products-container');
+    if (!subs.length){ el.innerHTML = '<div class="empty-state">No product submissions yet. Use the "Add product" tab to submit one.</div>'; return; }
+
+    el.innerHTML = subs.map(function(s){
+      var d = s.data || {};
+      var fields = '';
+      fields += fieldRow('Category', d.category);
+      fields += fieldRow('Price / CTA', d.price_note);
+      var featuresBlock = d.features ? '<div class="entry-message"><b style="display:block;color:var(--muted);font-size:.72rem;text-transform:uppercase;margin-bottom:4px">Features</b>'+escapeHtml(d.features)+'</div>' : '';
+      var specsBlock = d.specs ? '<div class="entry-message"><b style="display:block;color:var(--muted);font-size:.72rem;text-transform:uppercase;margin-bottom:4px">Specs</b>'+escapeHtml(d.specs)+'</div>' : '';
+      var descBlock = d.description ? '<div class="entry-message"><b style="display:block;color:var(--muted);font-size:.72rem;text-transform:uppercase;margin-bottom:4px">Description</b>'+escapeHtml(d.description)+'</div>' : '';
+      var notesBlock = d.notes ? '<div class="entry-message"><b style="display:block;color:var(--muted);font-size:.72rem;text-transform:uppercase;margin-bottom:4px">Notes</b>'+escapeHtml(d.notes)+'</div>' : '';
+      var imgKeys = ['image_hero','image_2','image_3','image_4'];
+      var imgs = imgKeys.filter(function(k){ return isFileUrl(d[k]); }).map(function(k){
+        return '<a href="'+escapeHtml(d[k])+'" target="_blank" rel="noopener"><img src="'+escapeHtml(d[k])+'" alt=""></a>';
+      }).join('');
+      var imgsBlock = imgs ? '<div class="entry-images">'+imgs+'</div>' : '<div class="empty-state" style="padding:8px 0;text-align:left">No images attached.</div>';
+
+      return '<div class="entry-card">'
+        + '<span class="entry-tag">'+escapeHtml(d.category || 'Product submission')+'</span>'
+        + '<div class="entry-top"><span class="entry-name">'+escapeHtml(d.product_name || '(untitled)')+'</span><span class="entry-date">'+escapeHtml(fmtDate(s.created_at))+'</span></div>'
+        + '<div class="entry-field" style="margin-bottom:6px"><b>Tagline</b>'+escapeHtml(d.tagline)+'</div>'
+        + '<div class="entry-grid">'+fields+'</div>'
+        + descBlock + featuresBlock + specsBlock + notesBlock + imgsBlock
+        + '</div>';
+    }).join('');
+  }
+
+  // ---------- Shared error handling ----------
+  function handleApiError(err, containerSel){
+    if (err && err.authError){
+      clearPw();
+      qs('#dashboard').hidden = true;
+      qs('#gate').hidden = false;
+      qs('#gate-error').textContent = 'Session expired. Please enter the password again.';
+      return;
+    }
+    qs(containerSel).innerHTML = '<div class="error-state">Could not load data. Please try refreshing.</div>';
+  }
+
+  qs('#refresh-leads').addEventListener('click', loadLeads);
+  qs('#refresh-products').addEventListener('click', loadProducts);
+
+  // ---------- Product submission form (AJAX so admins stay on this page) ----------
+  var pForm = qs('#product-form');
+  var pStatus = qs('#product-form-status');
+  var pBtn = qs('#product-form-submit');
+  pForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    pBtn.disabled = true;
+    pStatus.className = '';
+    pStatus.textContent = 'Submitting\u2026';
+    var fd = new FormData(pForm);
+    fetch('/', { method: 'POST', body: fd }).then(function(res){
+      if (res.ok){
+        pStatus.className = 'success';
+        pStatus.textContent = 'Submitted! It now appears in the "Product inbox" tab.';
+        pForm.reset();
+        pBtn.disabled = false;
+        if (loadedTabs.products) { loadProducts(); }
+      } else {
+        throw new Error('Server error');
+      }
+    }).catch(function(){
+      pStatus.className = 'error';
+      pStatus.textContent = 'Something went wrong. Please try again.';
+      pBtn.disabled = false;
+    });
+  });
+
+  // Auto-unlock if a password is already remembered for this browser tab session
+  if (getPw()) { tryUnlock(getPw()); }
+})();
+</script>
+</body>
+</html>
