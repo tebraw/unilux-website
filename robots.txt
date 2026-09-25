@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin12345/
+
+Sitemap: https://www.cenluxe.com/sitemap.xml
