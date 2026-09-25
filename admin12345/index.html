@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>UNILUX Admin</title>
+<title>CENLUXE Admin</title>
 <style>
 :root{--ink:#0b0d12;--card:#12151d;--card2:#171b26;--line:rgba(255,255,255,.09);--red:#e21f2f;--txt:#e7e9ee;--muted:#9aa1ac}
 *{box-sizing:border-box}
@@ -74,7 +74,7 @@ nav.tabs{display:flex;gap:8px;flex-wrap:wrap}
 
 <div id="gate">
   <div class="gate-box">
-    <h1>UNILUX Admin</h1>
+    <h1>CENLUXE Admin</h1>
     <p>Enter the admin password to continue.</p>
     <input type="password" id="gate-password" placeholder="Password" autocomplete="current-password">
     <button id="gate-submit" type="button">Unlock</button>
@@ -84,7 +84,7 @@ nav.tabs{display:flex;gap:8px;flex-wrap:wrap}
 
 <div id="dashboard" hidden>
   <header>
-    <h1>UNILUX Admin</h1>
+    <h1>CENLUXE Admin</h1>
     <nav class="tabs">
       <button class="tab-btn active" data-tab="leads">Leads</button>
       <button class="tab-btn" data-tab="add-product">Add product</button>
@@ -191,9 +191,9 @@ nav.tabs{display:flex;gap:8px;flex-wrap:wrap}
   var FN_URL = '/.netlify/functions/admin-data';
   var loadedTabs = {};
 
-  function getPw(){ return sessionStorage.getItem('unilux_admin_pw') || ''; }
-  function setPw(v){ sessionStorage.setItem('unilux_admin_pw', v); }
-  function clearPw(){ sessionStorage.removeItem('unilux_admin_pw'); }
+  function getPw(){ return sessionStorage.getItem('cenluxe_admin_pw') || ''; }
+  function setPw(v){ sessionStorage.setItem('cenluxe_admin_pw', v); }
+  function clearPw(){ sessionStorage.removeItem('cenluxe_admin_pw'); }
 
   function fmtDate(iso){
     try{
